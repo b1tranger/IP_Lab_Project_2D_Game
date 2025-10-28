@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underwater Swimmer (PHP Version)</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        canvas {
+            background: linear-gradient(to bottom, #0077be, #00bfff);
+            display: block;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Bubble background animation */
+        .game-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            bottom: -50px;
+            animation: rise 10s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-blue-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-4xl">
+        <h1 class="text-3xl font-bold text-center mb-4 text-yellow-300">Underwater Swimmer</h1>
+        
+        <!-- User ID Display -->
+        <div class="text-center mb-2">
+            <!-- In a real PHP app, this ID would come from a server session -->
+            <p class="text-xs">Your User ID: <span id="user-id-display" class="font-mono bg-blue-700 px-2 py-0.5 rounded">Loading...</span></p>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-container w-full aspect-[2/1] rounded-lg shadow-xl relative">
+            <canvas id="game-canvas"></canvas>
+            
+            <!-- Score Display -->
+            <div class="absolute top-4 left-4 bg-black/50 px-4 py-2 rounded-lg">
+                <span class="text-2xl font-bold text-yellow-400">Coins: </span>
+                <span id="score-display" class="text-2xl font-bold text-white">0 / 20</span>
+            </div>
+
+            <!-- Game Over / Win Modal -->
+            <div id="end-game-modal" class="absolute inset-0 bg-black/70 flex-col items-center justify-center hidden">
+                <h2 id="end-game-title" class="text-5xl font-bold text-white mb-4"></h2>
+                <p class="text-2xl text-white mb-2">Final Score: <span id="final-score"></span> coins</p>
+                <div class="flex space-x-4">
+                    <button id="save-score-btn" class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow-lg transition duration-200">Save Score</button>
+                    <button id="play-again-btn" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-lg transition duration-200">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- High Scores Area -->
+        <div class="mt-6 bg-blue-800/50 p-4 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3 text-center">Your High Scores</h3>
+            <ul id="high-scores-list" class="text-center h-32 overflow-y-auto">
+                <li class="text-gray-400">No scores saved yet.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Game Logic -->
+    <script>
+        // --- DOM Elements ---
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score-display');
+        const endGameModal = document.getElementById('end-game-modal');
+        const endGameTitle = document.getElementById('end-game-title');
+        const finalScore = document.getElementById('final-score');
+        const saveScoreBtn = document.getElementById('save-score-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const highScoresList = document.getElementById('high-scores-list');
+        const gameContainer = document.querySelector('.game-container');
+        
+        // --- App State ---
+        let userId;
+
+        // --- Game State ---
+        let score = 0;
+        const scoreToWin = 20;
+        let gameOver = false;
+        let gameRunning = false;
+        let player, coins, obstacles;
+        let gameSpeed = 3;
+        let frameCount = 0;
+
+        // --- Game Classes (Copied from original) ---
+        class Player {
+            constructor() {
+                this.x = 150;
+                this.y = canvas.height / 2;
+                this.width = 60;
+                this.height = 40;
+                this.speedY = 0;
+                this.gravity = 0.2;
+                this.lift = -6;
+                this.color = '#FFD700'; // Yellow for swimmer
+                this.emoji = '🏊';
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.font = '30px Arial';
+                ctx.fillText(this.emoji, this.x + 10, this.y + 30);
+            }
+
+            update() {
+                this.speedY += this.gravity;
+                this.y += this.speedY;
+
+                if (this.y + this.height > canvas.height) {
+                    this.y = canvas.height - this.height;
+                    this.speedY = 0;
+                }
+                if (this.y < 0) {
+                    this.y = 0;
+                    this.speedY = 0;
+                }
+            }
+
+            flap() {
+                this.speedY = this.lift;
+            }
+        }
+
+        class Coin {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = 20;
+                this.color = '#FFD700'; // Gold
+                this.emoji = '🪙';
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+
+        class Obstacle {
+            constructor(x, y, height) {
+                this.x = x;
+                this.y = y; // y is the top of the obstacle
+                this.width = 40;
+                this.height = height;
+                this.color = '#DC2626'; // Red for danger
+                this.emoji = '🦀';
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.font = '30px Arial';
+                ctx.fillText(this.emoji, this.x, this.y + 30);
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+
+        // --- Game Functions (Copied from original) ---
+        function resizeCanvas() {
+            const containerWidth = gameContainer.clientWidth;
+            const containerHeight = gameContainer.clientHeight;
+            
+            canvas.width = containerWidth;
+            canvas.height = containerHeight;
+
+            if (player) {
+                player.y = Math.min(player.y, canvas.height - player.height);
+            }
+        }
+
+        function initGame() {
+            score = 0;
+            gameOver = false;
+            gameRunning = true;
+            gameSpeed = 3;
+            frameCount = 0;
+
+            player = new Player();
+            coins = [];
+            obstacles = [];
+            
+            spawnCollectibles();
+            
+            endGameModal.classList.add('hidden');
+            endGameModal.classList.remove('flex');
+            updateScoreDisplay();
+        }
+
+        function spawnCollectibles() {
+            const coinY = Math.random() * (canvas.height - 20);
+            coins.push(new Coin(canvas.width + 50, coinY));
+
+            if (frameCount % 90 === 0) {
+                const obstacleHeight = Math.random() * (canvas.height / 2) + 50;
+                const topOrBottom = Math.random();
+
+                if (topOrBottom < 0.5) {
+                    obstacles.push(new Obstacle(canvas.width + 50, 0, obstacleHeight));
+                } else {
+                    obstacles.push(new Obstacle(canvas.width + 50, canvas.height - obstacleHeight, obstacleHeight));
+                }
+            }
+        }
+
+        function handleCollisions() {
+            for (let i = coins.length - 1; i >= 0; i--) {
+                const coin = coins[i];
+                if (
+                    player.x < coin.x + coin.size &&
+                    player.x + player.width > coin.x &&
+                    player.y < coin.y + coin.size &&
+                    player.y + player.height > coin.y
+                ) {
+                    coins.splice(i, 1);
+                    score++;
+                    updateScoreDisplay();
+                    if(score % 5 === 0) gameSpeed += 0.2;
+                }
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                if (
+                    player.x < obstacle.x + obstacle.width &&
+                    player.x + player.width > obstacle.x &&
+                    player.y < obstacle.y + obstacle.height &&
+                    player.y + player.height > obstacle.y
+                ) {
+                    triggerGameOver(false);
+                }
+            }
+        }
+
+        function checkWinCondition() {
+            if (score >= scoreToWin) {
+                triggerGameOver(true);
+            }
+        }
+
+        function triggerGameOver(isWin) {
+            if (gameOver) return;
+            
+            gameOver = true;
+            gameRunning = false;
+            
+            finalScore.textContent = score;
+            if (isWin) {
+                endGameTitle.textContent = "You Win!";
+                endGameTitle.classList.remove('text-red-500');
+                endGameTitle.classList.add('text-green-500');
+            } else {
+                endGameTitle.textContent = "Game Over!";
+                endGameTitle.classList.remove('text-green-500');
+                endGameTitle.classList.add('text-red-500');
+            }
+            
+            endGameModal.classList.remove('hidden');
+            endGameModal.classList.add('flex');
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = `${score} / ${scoreToWin}`;
+        }
+        
+        function createBubbles() {
+            const bubbleCount = 20;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.random() * 30 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                bubble.style.animationDelay = `${Math.random() * 10}s`;
+                gameContainer.appendChild(bubble);
+            }
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            player.update();
+            player.draw();
+            for (let i = coins.length - 1; i >= 0; i--) {
+                coins[i].update();
+                coins[i].draw();
+                if (coins[i].x + coins[i].size < 0) coins.splice(i, 1);
+            }
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].update();
+                obstacles[i].draw();
+                if (obstacles[i].x + obstacles[i].width < 0) obstacles.splice(i, 1);
+            }
+            spawnCollectibles();
+            handleCollisions();
+            if (!gameOver) checkWinCondition();
+            frameCount++;
+            if (!gameOver) requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            resizeCanvas();
+            initGame();
+            gameLoop();
+        }
+
+        // --- Event Listeners ---
+        function handlePlayerInput(e) {
+            if (gameRunning) {
+                if (e.code === 'Space' || e.code === 'ArrowUp' || e.type === 'touchstart') {
+                    e.preventDefault();
+                    player.flap();
+                }
+            }
+        }
+        
+        window.addEventListener('keydown', handlePlayerInput);
+        canvas.addEventListener('touchstart', handlePlayerInput);
+
+        playAgainBtn.addEventListener('click', () => {
+            startGame();
+        });
+
+        // --- PHP Backend Functions ---
+
+        saveScoreBtn.addEventListener('click', async () => {
+            // This 'userId' would have to come from your server's session/auth system
+            // We use the one we generated for this demo.
+            
+            try {
+                const response = await fetch('save_score.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: userId, // Use the globally set userId
+                        score: score,
+                        won: score >= scoreToWin
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server responded with an error');
+                }
+
+                const result = await response.json();
+                console.log(result.message); // "Score saved successfully!"
+
+                saveScoreBtn.textContent = "Saved!";
+                saveScoreBtn.disabled = true;
+                setTimeout(() => {
+                    saveScoreBtn.textContent = "Save Score";
+                    saveScoreBtn.disabled = false;
+                }, 2000);
+                
+                // Refresh the high scores list after saving
+                await loadHighScores(userId);
+
+            } catch (error) {
+                console.error("Error saving score: ", error);
+                saveScoreBtn.textContent = "Save Failed";
+            }
+        });
+        
+        async function loadHighScores(currentUserId) {
+            if (!currentUserId) return;
+            
+            try {
+                // Call the get_scores.php file
+                const response = await fetch(`get_scores.php?userId=${currentUserId}`);
+                if (!response.ok) {
+                    throw new Error('Server responded with an error');
+                }
+                
+                const scores = await response.json();
+
+                highScoresList.innerHTML = ''; // Clear list
+                if (scores.length === 0) {
+                    highScoresList.innerHTML = '<li class="text-gray-400">Play a game to see your scores!</li>';
+                    return;
+                }
+
+                // Populate the list
+                scores.forEach(data => {
+                    const li = document.createElement('li');
+                    li.className = `font-mono p-1 rounded ${data.won ? 'text-green-300' : 'text-gray-300'}`;
+                    // Ensure 'won' is treated as a boolean or 1/0
+                    const winStatus = data.won == 1 || data.won === true;
+                    li.className = `font-mono p-1 rounded ${winStatus ? 'text-green-300' : 'text-gray-300'}`;
+                    li.textContent = `Score: ${data.score} - ${new Date(data.createdAt).toLocaleDateString()}`;
+                    highScoresList.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error("Error loading high scores: ", error);
+                highScoresList.innerHTML = '<li class="text-red-400">Error loading scores.</li>';
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if(gameRunning) {
+                resizeCanvas();
+            }
+        });
+
+        // --- Start Everything ---
+        function main() {
+            // Generate a simple demo user ID.
+            // In a real PHP app, you'd get this from the server (e.g., injected from $_SESSION['user_id'])
+            userId = 'demoUser_' + Math.random().toString(16).substr(2, 8);
+            userIdDisplay.textContent = userId;
+
+            // Load initial scores
+            loadHighScores(userId);
+            
+            // Start the game
+            startGame();
+            
+            // Start background bubbles
+            createBubbles();
+        }
+
+        main(); // Run the application
+    </script>
+</body>
+</html>
+
