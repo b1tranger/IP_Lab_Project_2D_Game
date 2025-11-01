@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... (head content is identical) ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Adventure</title>
@@ -9,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ... (CSS is identical) ... */
         :root {
             --bg-primary: #11111f;
             --bg-secondary: #22223b;
@@ -47,6 +45,7 @@
             transition: all 0.3s ease;
         }
 
+        /* Score Display */
         #score-display {
             padding: 15px 30px;
             background-color: #1a1a2e;
@@ -57,6 +56,7 @@
             border-bottom: 1px solid #404066;
         }
 
+        /* Story Area */
         #story-text {
             padding: 30px;
             font-size: 1.1rem;
@@ -65,6 +65,7 @@
             border-bottom: 1px solid var(--accent-primary);
         }
 
+        /* Choices Area */
         #choices-container {
             padding: 30px;
             display: grid;
@@ -96,6 +97,7 @@
             transform: translateY(0);
         }
 
+        /* Ending Screen */
         #ending-screen {
             padding: 40px;
             text-align: center;
@@ -143,29 +145,40 @@
             background-color: #a0c0ff;
         }
 
+        /* Ending-specific colors */
         .good-ending { color: var(--good-ending); }
         .avg-ending { color: var(--avg-ending); }
         .bad-ending { color: var(--bad-ending); }
+
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <!-- ... (HTML structure is identical) ... -->
+        <!-- Score Display -->
         <div id="score-display">Total Score: 0</div>
+
+        <!-- Story content will be injected here -->
         <div id="story-text">Loading game...</div>
+        
+        <!-- Choices will be injected here -->
         <div id="choices-container"></div>
+
+        <!-- Ending Screen -->
         <div id="ending-screen" style="display: none;">
             <h2 id="ending-result"></h2>
             <p id="ending-summary"></p>
-            <p id="final-score"></p>
+            <p id="final-score"></p> <!-- Added this element -->
             <p id="save-status"></p>
             <button id="play-again-btn" class="choice-btn">Play Again</button>
         </div>
     </div>
 
     <script>
-        // ... (Story data is identical) ...
+        /**
+         * Story data for the game.
+         * Each object key is a scene identifier.
+         */
         const storyData = {
             start: {
                 text: "You wake up in a dark forest. A faint light flickers in the distance. To your left, you hear a strange rustling in the bushes. What do you do?",
@@ -224,45 +237,61 @@
                     { text: "Head towards the village.", points: 20, nextScene: "check_ending", log: "The path led you to a hilltop overlooking a peaceful village at sunrise. You were safe." }
                 ]
             },
+            // This is a "dummy" scene that just routes to the ending logic
             check_ending: {
-                text: "", 
+                text: "", // This text won't be shown
                 choices: []
             }
         };
 
+        /**
+         * Main Game class
+         * Handles all game logic, state, and UI updates.
+         */
         class Game {
-            // ... (constructor is identical) ...
             constructor() {
+                // Game state
                 this.points = 0;
                 this.storyLog = [];
                 this.currentScene = 'start';
 
+                // DOM Elements
                 this.storyTextElement = document.getElementById("story-text");
                 this.choicesContainerElement = document.getElementById("choices-container");
                 this.endingScreenElement = document.getElementById("ending-screen");
                 this.endingSummaryElement = document.getElementById("ending-summary");
                 this.endingResultElement = document.getElementById("ending-result");
-                this.finalScoreElement = document.getElementById("final-score");
+                this.finalScoreElement = document.getElementById("final-score"); // Added
                 this.saveStatusElement = document.getElementById("save-status");
                 this.gameContainerElement = document.getElementById("game-container");
                 this.scoreDisplayElement = document.getElementById("score-display");
             }
-            
-            // ... (start, updateScoreDisplay, showScene, makeChoice, triggerEnding are identical) ...
+
+            /**
+             * Starts the game by showing the first scene.
+             */
             start() {
                 this.points = 0;
                 this.storyLog = [];
                 this.currentScene = "start";
-                this.updateScoreDisplay(); 
-                this.scoreDisplayElement.style.display = "block"; 
+                this.updateScoreDisplay(); // Reset score display
+                this.scoreDisplayElement.style.display = "block"; // Ensure it's visible
                 this.showScene("start");
             }
 
+            /**
+             * Updates the score display UI.
+             */
             updateScoreDisplay() {
                 this.scoreDisplayElement.innerText = `Total Score: ${this.points}`;
             }
 
+            /**
+             * Displays a scene by updating the UI.
+             * @param {string} sceneKey - The key of the scene to display from storyData.
+             */
             showScene(sceneKey) {
+                // Special check for the "check_ending" scene
                 if (sceneKey === "check_ending") {
                     this.triggerEnding(sceneKey);
                     return;
@@ -277,8 +306,10 @@
                 this.currentScene = sceneKey;
                 this.storyTextElement.innerText = scene.text;
                 
+                // Clear old choices
                 this.choicesContainerElement.innerHTML = '';
                 
+                // Populate choices
                 scene.choices.forEach((choice, index) => {
                     const button = document.createElement("button");
                     button.innerText = choice.text;
@@ -288,6 +319,10 @@
                 });
             }
 
+            /**
+             * Handles the logic when a player makes a choice.
+             * @param {number} choiceIndex - The index of the choice made.
+             */
             makeChoice(choiceIndex) {
                 const scene = storyData[this.currentScene];
                 const choice = scene.choices[choiceIndex];
@@ -297,15 +332,26 @@
                     return;
                 }
 
+                // Update game state
                 this.points += choice.points;
                 this.storyLog.push(choice.log);
-                this.updateScoreDisplay(); 
+                this.updateScoreDisplay(); // Update score display
                 
                 const nextScene = choice.nextScene;
                 this.showScene(nextScene);
             }
 
+            /**
+             * Triggers the end of the game, calculates the ending, and displays it.
+             */
             triggerEnding(sceneKey) {
+                // Get the final story beat from the previous scene
+                const lastSceneKey = this.currentScene;
+                const lastScene = storyData[lastSceneKey];
+                // This assumes the choice leading to 'check_ending' is the one we log
+                // This is a slight simplification; a more complex game might need to pass the log
+                
+                // Determine ending
                 let endingType = "AVERAGE ENDING...";
                 let endingClass = "avg-ending";
                 
@@ -317,25 +363,28 @@
                     endingClass = "bad-ending";
                 }
                 
+                // Get the final part of the story summary
                 const scene = storyData[this.currentScene];
                 const finalSummary = this.storyLog.join(" ") + " " + scene.text;
 
+                // Hide game and show ending
                 this.scoreDisplayElement.style.display = "none";
                 this.storyTextElement.style.display = "none";
                 this.choicesContainerElement.style.display = "none";
 
+                // Populate ending screen
                 this.endingResultElement.innerText = endingType;
                 this.endingResultElement.className = endingClass;
                 this.endingSummaryElement.innerText = finalSummary;
-                this.finalScoreElement.innerText = `Your Final Score: ${this.points}`; 
+                this.finalScoreElement.innerText = `Your Final Score: ${this.points}`; // Display the score
                 this.endingScreenElement.style.display = "block";
                 
+                // Save the score
                 this.saveScore(this.points, finalSummary, endingType);
             }
 
             /**
              * Saves the score to the backend using PHP.
-             * !! THIS FUNCTION IS UPDATED !!
              * @param {number} score - The final score.
              * @param {string} summary - The final story summary.
              * @param {string} endingType - The ending text.
@@ -343,30 +392,25 @@
             async saveScore(score, summary, endingType) {
                 this.saveStatusElement.innerText = "Saving score...";
 
-                // --- CHANGE IS HERE ---
-                // Instead of JSON, we use URLSearchParams, which acts like a form.
-                const formData = new URLSearchParams();
-                formData.append('score', score);
-                formData.append('summary', summary);
-                formData.append('ending_type', endingType);
-                // --- END OF CHANGE ---
+                const data = {
+                    score: score,
+                    summary: summary,
+                    ending_type: endingType
+                };
 
                 try {
                     const response = await fetch('save_score.php', {
                         method: 'POST',
-                        // --- CHANGE IS HERE ---
-                        // We remove the 'Content-Type': 'application/json' header.
-                        // Fetch will automatically set the correct header for URLSearchParams.
-                        body: formData
-                        // --- END OF CHANGE ---
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     });
                     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
-                    // The *response* from PHP is still JSON (the success/error message),
-                    // so this part stays the same.
                     const result = await response.json();
                     
                     if (result.status === 'success') {
@@ -381,15 +425,19 @@
                 }
             }
             
-            // ... (setupEventListeners is identical) ...
+            /**
+             * Sets up the event listener for the 'Play Again' button.
+             */
             setupEventListeners() {
                 const playAgainButton = document.getElementById("play-again-btn");
                 playAgainButton.addEventListener("click", () => {
+                    // Reset UI
                     this.storyTextElement.style.display = "block";
                     this.choicesContainerElement.style.display = "block";
                     this.endingScreenElement.style.display = "none";
-                    this.finalScoreElement.innerText = "";
+                    this.finalScoreElement.innerText = ""; // Clear score
                     this.saveStatusElement.innerText = "";
+                    // Start new game
                     this.start();
                 });
             }

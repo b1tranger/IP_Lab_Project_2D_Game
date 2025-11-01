@@ -9,7 +9,7 @@ $db_name = 'game_db';       // Your database name
 
 // --- SCRIPT ---
 
-// Set header to return JSON (for the *response* we send back)
+// Set header to return JSON
 header('Content-Type: application/json');
 
 // Function to send a JSON error response
@@ -26,17 +26,20 @@ if ($mysqli->connect_error) {
     json_error('Database connection failed: ' . $mysqli->connect_error);
 }
 
-// --- CHANGE IS HERE ---
-// 2. Get data from the $_POST array
-// Because we sent data like a form, PHP automatically puts it in the $_POST variable.
-// We no longer need to read `php://input` or use `json_decode`.
+// 2. Get data from the POST request
+// We get the raw POST data because we sent JSON
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+// Check if data is valid
+if (json_last_error() !== JSON_ERROR_NONE) {
+    json_error('Invalid JSON input.');
+}
 
 // 3. Validate and sanitize data
-$score = $_POST['score'] ?? null;
-$summary = $_POST['summary'] ?? null;
-$ending_type = $_POST['ending_type'] ?? null;
-// --- END OF CHANGE ---
-
+$score = $data['score'] ?? null;
+$summary = $data['summary'] ?? null;
+$ending_type = $data['ending_type'] ?? null;
 
 if (!isset($score) || !is_numeric($score)) {
     json_error('Invalid or missing score.');
@@ -51,7 +54,7 @@ if (empty($ending_type) || !is_string($ending_type)) {
 }
 
 // 4. Prepare and execute the SQL statement
-// This part is the same as before.
+// We use a prepared statement to prevent SQL injection.
 $stmt = $mysqli->prepare('INSERT INTO game_scores (score, summary, ending_type) VALUES (?, ?, ?)');
 
 if (!$stmt) {
@@ -63,8 +66,7 @@ $stmt->bind_param('iss', $score, $summary, $ending_type);
 
 // Execute the statement
 if ($stmt->execute()) {
-    // Success - we *respond* with JSON to tell the
-    // JavaScript it worked.
+    // Success
     echo json_encode(['status' => 'success', 'message' => 'Score saved successfully.']);
 } else {
     // Failure
