@@ -5,17 +5,33 @@ session_start();
 
 $user_id = $_SESSION["user_id"];
 $username = $_SESSION["username"];
-// $storyState = $_SESSION['story_state'];
+$storyState = $_SESSION['story_state'];
 echo "| welcome " . $username . ", | ID: " . $user_id . " | ";
+
+for ($i = 0; $i <= 1; $i++) {
+    // $storyState = $_SESSION['story_state'];
+    $sqlChoice = "SELECT * FROM story WHERE story_id='$storyState'";
+    $sqlChoiceQuery = mysqli_query($conn, $sqlChoice);
+    $sqlChoiceFetch = mysqli_fetch_assoc($sqlChoiceQuery);
+    $Choice1 = $sqlChoiceFetch["choice1"];
+    $Choice2 = $sqlChoiceFetch["choice2"];
+    $StoryUpdate = $sqlChoiceFetch['story'];
+    $updateStory = "UPDATE progression SET game_progress = CONCAT(game_progress, '$StoryUpdate') WHERE user_id = '$user_id'";
+}
+
 
 
 class game
 {
     public $gameStory; // supposed to be an array to store game story
-    public $flag = 0;
+    // public $flag = 0;
     public $conn;
     public $user_id;
     public $username;
+    public $Choice1;
+    public $Choice2;
+    public $thoughts;
+    public $story;
 
     public function __construct($conn, $user_id, $username)
     {
@@ -26,54 +42,57 @@ class game
     public function choice1()
     {
         // echo "Selected Choice 1 ";
-        // $RNG = random_int(1, 10);
-        // echo "RNG IS " . $RNG;
-        $sql = "UPDATE progression SET game_progress = CONCAT(game_progress, '$StoryUpdate') WHERE user_id = '$user_id'";
+        $sql = "SELECT * FROM story WHERE user_id='$this->user_id' AND username='$this->username' ";
+        $query = mysqli_query($this->conn, $sql);
+        $row = mysqli_fetch_assoc($query);
+        $this->Choice1 = $row["choice1"];
+        $this->Choice2 = $row["choice2"];
+        $this->thoughts = $row["thoughts"];
+        $this->story = $row["story"];
+
+        $sql = "UPDATE progression SET game_progress = CONCAT(game_progress, '$this->story','$this->Choice1','$this->thoughts') WHERE user_id = '$this->user_id'";
+        $query = mysqli_query($this->conn, $sql);
+
     }
     public function choice2()
     {
-        echo "Selected Choice 2 ";
-        $RNG = random_int(1, 10);
-        echo "RNG IS " . $RNG;
+        // echo "Selected Choice 2 ";
+        $sql = "SELECT * FROM story WHERE user_id='$this->user_id' AND username='$this->username' ";
+        $query = mysqli_query($this->conn, $sql);
+        $row = mysqli_fetch_assoc($query);
+        $this->Choice1 = $row["choice1"];
+        $this->Choice2 = $row["choice2"];
+        $this->thoughts = $row["thoughts"];
+        $this->story = $row["story"];
+
+        $sql = "UPDATE progression SET game_progress = CONCAT(game_progress, '$this->story','$this->Choice2','$this->thoughts') WHERE user_id = '$this->user_id'";
+        $query = mysqli_query($this->conn, $sql);
     }
-    public function gameLogic()
+    public function get()
     {
 
-
-        if ($this->flag == 0) {
-            $storyState = $_SESSION['story_state'];
-            $sqlChoice = "SELECT * FROM story WHERE story_id='$storyState'";
-            $sqlChoiceQuery = mysqli_query($this->conn, $sqlChoice);
-            $sqlChoiceFetch = mysqli_fetch_assoc($sqlChoiceQuery);
-            $Choice1 = $sqlChoiceFetch["choice1"];
-            $Choice2 = $sqlChoiceFetch["choice2"];
-            $StoryUpdate = $sqlChoiceFetch['story'];
-            $updateStory = "UPDATE progression SET game_progress = CONCAT(game_progress, '$StoryUpdate') WHERE user_id = '$user_id'";
-
-
-
-            $this->flag = 1;
-        } else {
-
+    }
+    public function gameLogic($choice)
+    {
+        if ($choice == 1) {
+            echo "Selected Choice 1";
+            $this->choice1();
+        } elseif ($choice == 2) {
+            echo "Selected Choice 2";
+            $this->choice2();
         }
     }
 }
 
 $action = new game($conn, $user_id, $username);
 
-
-
-
 if (isset($_POST['submit'])) {
     $choice = $_POST['choice'];
     $sql = "SELECT * FROM story ";
-    if ($choice == 1) {
-        // echo "Selected Choice 1";
-        $action->choice1();
-    } elseif ($choice == 2) {
-        // echo "Selected Choice 2";
-        $action->choice2();
-    }
+    $action->gameLogic($choice);
+    $Choice1 = $action->Choice1;
+    $Choice2 = $action->Choice2;
+    $thoughts = $action->thoughts;
 
 }
 
@@ -171,17 +190,7 @@ if (isset($_POST['submit'])) {
             <form method="POST">
                 <br><br>
                 <div style="padding-left:20px;">
-                    <?php
-                    // $RNG = random_int(1, 10);
-                    // $sqlChoice = "SELECT * FROM story WHERE story_id='$storyState'";
-                    // $sqlChoiceQuery = mysqli_query($conn, $sqlChoice);
-                    // $sqlChoiceFetch = mysqli_fetch_assoc($sqlChoiceQuery);
-                    // $Choice1 = $sqlChoiceFetch["choice1"];
-                    // $Choice2 = $sqlChoiceFetch["choice2"];
-                    // $StoryUpdate = $sqlChoiceFetch['story'];
-                    // $updateStory = "UPDATE progression SET game_progress = CONCAT(game_progress, '$StoryUpdate') WHERE user_id = '$user_id'";
-                    
-                    ?>
+
                     <input type="radio" value="1" name="choice" class="click" required>
                     <label>&nbsp;<?php echo $Choice1 ?></label>
                     <br><br>
