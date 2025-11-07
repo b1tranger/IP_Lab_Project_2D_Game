@@ -14,6 +14,9 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 - import the .sql file in phpmyadmin database
 - run Text Based Story/index.php
 
+### Used Assets
+- https://pixelfrog-assets.itch.io/tiny-swords 
+- https://samuellee.itch.io/reaper-animated-pixel-art/ 
 
 ### Used software
 - ChatGPT, Gemini (fixes, codes in backup folder are my own)
@@ -21,10 +24,10 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 - XAMPP (localhost), InfinityFree (hosting)
 - Aseprite (asset editing, .gif export)
 
-
 ### To-do Next
 - add background
 - fix SEO (attachment view, web link details)
 - more storylines
 - more animations
 - username validation logic (duplicate names are allowed for now)
+- Story window should auto scroll at the bottom (to show current storyline)
