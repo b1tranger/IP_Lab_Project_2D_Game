@@ -30,7 +30,7 @@ if ($current_story_id == 0) {
 
 
 
-    echo "<div style='text-align: center; margin-top: 10vh;'>";
+    echo '<div style="margin-top: 10vh; max-width: 500px; min-height: 40vh; margin: auto; border: 1px solid black; padding: 15px;"><div style="text-align: center; margin-top: 10vh;">';
     echo '<img src="assets/HostileIdleReaper.gif" height="200px";';
     echo "<br><h1>You Died!</h1>";
     echo "<p>The end always seems so sudden and uninteresting.</p>";
@@ -39,7 +39,7 @@ if ($current_story_id == 0) {
     echo "<h2>Total Score: " . $final_score . "</h2>";
     echo "<a href='index.php'>Play Again</a>";
     echo "<hr><div style='text-align:left; max-width: 500px; margin: auto; white-space: pre-wrap;'>" . htmlspecialchars($final_progress) . "</div>";
-    echo "</div>";
+    echo "</div></div>";
 
     session_destroy();
     exit();
@@ -292,14 +292,17 @@ $current_score_from_db = $sqlProgressFetch['score_sum'];
 </head>
 
 <body>
-    <div style="text-align: center; font-size: 1.2rem; font-family: sans-serif;">
-        <p>Welcome, <?php echo htmlspecialchars($username); ?>! | <b>Score: <?php echo $current_score_from_db; ?></b>
-        </p>
-    </div>
+
 
     <div class="game_window">
         <div class="game_section_01">
-            <h2 class="align_center border_top">Game Visuals</h2>
+            <!-- <h2 class="align_center border_top">Game Visuals</h2> -->
+            <div style="text-align: center; font-size: 1.2rem; font-family: sans-serif;"
+                class="align_center border_top">
+                <p>Welcome, <?php echo htmlspecialchars($username); ?>! | <b>Score:
+                        <?php echo $current_score_from_db; ?></b>
+                </p>
+            </div>
             <hr>
             <div>
                 <?php if ($RNG == 2 || $RNG == 4 || $RNG == 5 || $RNG == 6): ?>
@@ -310,7 +313,7 @@ $current_score_from_db = $sqlProgressFetch['score_sum'];
             </div>
         </div>
         <div class="game_section_02">
-            <h2 class="align_center border_top">Story</h2>
+            <!-- <h2 class="align_center border_top">Story</h2> -->
             <hr>
             <!-- 
                 Using 'white-space: pre-wrap;' in CSS along with htmlspecialchars()
