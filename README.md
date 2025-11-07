@@ -6,6 +6,9 @@ ID: 0432410005101088
 Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/) 
 
 
+### Play online
+- Go to https://ip-project-008.infinityfreeapp.com/ 
+
 ### How to setup for localhost
 - copy files in xampp/htdocs/ folder
 - import the .sql file in phpmyadmin database
