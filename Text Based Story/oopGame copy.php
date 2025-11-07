@@ -26,17 +26,14 @@ if ($current_story_id == 0) {
     $final_progress = $sqlProgressFetch['game_progress'];
     $final_score = $sqlProgressFetch['score_sum'];
 
-    echo '<div style="margin-top: 10vh; max-width: 500px; min-height: 40vh; margin: auto; border: 1px solid black; padding: 15px;"><div style="text-align: center;">';
-    echo '<img src="assets/HostileIdleReaper.gif" height="200px";';
-    echo "<br><h1>You Died!</h1>";
-    echo "<p>The end always seems so sudden and uninteresting.</p>";
-    echo "<hr>";
-    echo "<p>Your journey has ended.</p>";
+    echo "<div style='text-align: center; margin-top: 20vh;'>";
+    echo "<h1>You Died!</h1>";
     echo "<h2>Total Score: " . $final_score . "</h2>";
+    echo "<p>Your journey has ended.</p>";
     echo "<a href='index.php'>Play Again</a>";
+    // Added pre-wrap and htmlspecialchars for the final screen
     echo "<hr><div style='text-align:left; max-width: 500px; margin: auto; white-space: pre-wrap;'>" . htmlspecialchars($final_progress) . "</div>";
-    echo "</div></div>";
-
+    echo "</div>";
 
     session_destroy();
     exit();

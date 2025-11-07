@@ -69,17 +69,17 @@ CREATE TABLE `story` (
 --
 
 INSERT INTO `story` (`story_id`, `story`, `choice1`, `choice2`, `c1_points`, `c2_points`, `thoughts`) VALUES
-(1, 'The sky is dark today, it may rain soon. ', 'You went to sleep', 'Mere rain tries to stop my noble journey? ', 5, 30, 'You did not regret it but the author decided to curse you anyway. '),
+(1, 'The sky is dark today, it may rain soon. ', 'You went to sleep', 'Mere rain tries to stop my noble journey? ', 5, 30, 'You did not regret it, but the author decided to curse you anyway. '),
 (2, 'You remembered that you are a warrior. Are you well-equipped? ', 'You have a knife. ', 'You have a shield. ', 10, 15, 'Sometimes a good offence is the best defence. Only sometimes, that is... '),
-(3, 'The starting of the day was tough. ', 'You hadn\'t had breakfast. ', 'You had a stomach ache from last night\'s meal. ', 5, 5, 'Is it a bad omen? '),
-(4, 'While treading the rough road you had a wild encounter. ', 'Is it a butterfly? ', 'You see a goblin. ', 10, 5, 'It was actually a Politician who lost election. '),
-(5, 'You recall that you had a wild encounter. But what did you do with it? ', 'You admired the state it was in and felt blessed. ', 'You kicked and bashed it to make it more miserable than it seemed to me. ', 20, 10, 'Somehow it felt well-deserved. '),
-(6, 'The nation was in a dire state. ', 'You chose to remain for any unforeseen circumstances. ', 'You chose to ditch it... Just because you can ! ', 15, 10, 'Sometimes your feelings do take priority. '),
-(7, 'Past the river you met a beautiful person. ', 'You greeted them and marched on. ', 'You marched on. ', 15, 5, 'Would such a beautiful person greet you back? Maybe gift you even? Author did not bother to add that. '),
-(8, 'You remember a certain lunchtime, you had a great meal . ', 'You ate your fill. Almost too much. ', 'You had a bad feeling about how good it was. ', 5, 5, 'Was it a good feeling or a bad one? '),
-(9, 'A pouch of goods fell from a traveller. ', 'You returned it, and they thanked you for it. ', 'You inspected it before returning. But you took too long and they were gone. ', 15, 0, 'A good deed did I do today? '),
-(10, 'You found an orphan crying at the roadside. Seems like it lost some money it had. ', 'You walked away. ', 'You got some money out of your own pouch, and gave away saying you found it lying on the road. ', 1, 2, 'Sometimes responsibilities are but choices. '),
-(0, 'You Died ! ', 'choice0', 'choice0', 0, 0, 'The end always seems so sudden and uninteresting. ');
+(3, 'The start of the day was tough. ', 'You hadn\'t had breakfast. ', 'You had a stomach ache from last night\'s meal. ', 5, 5, 'Is it a bad omen? '),
+(4, 'While treading the rough road, you had a wild encounter. ', 'Is it a butterfly? ', 'You see a goblin. ', 10, 5, 'It was actually a Politician who lost an election. '),
+(5, 'You recall that you had a wild encounter. But what did you do with it? ', 'You admired the state it was in and felt blessed. ', 'You kicked and bashed it to make it more miserable than it seemed to you. ', 20, 10, 'Somehow it felt well-deserved. '),
+(6, 'The nation was in a dire state. ', 'You chose to remain for any unforeseen circumstances. ', 'You chose to ditch it... Just because you can! ', 15, 10, 'Sometimes your feelings do take priority. '),
+(7, 'Past the river, you met a beautiful person. ', 'You greeted them and marched on. ', 'You marched on. ', 15, 5, 'Would such a beautiful person greet you back? Even gift you something? The author did not bother to add that. '),
+(8, 'You remember a certain lunchtime, you had a great meal. ', 'You ate your fill. Almost too much. ', 'You had a bad feeling about how good it was. ', 5, 5, 'Was it a good or a bad one? '),
+(9, 'A pouch of goods fell from a traveller. ', 'You returned it, and they thanked you for it. ', 'You inspected it before returning. But you took too long, and they were gone. ', 15, 0, 'A good deed did I do today? '),
+(10, 'You found an orphan crying at the roadside. Seems like it lost some money it had. ', 'You walked away. ', 'You got some money out of your own pouch, and gave it away, saying you found it lying on the road. ', 1, 2, 'Sometimes responsibilities are but choices. '),
+(0, 'You Died! ', 'choice0', 'choice0', 0, 0, 'The end always seems so sudden and uninteresting. ');
 
 --
 -- Indexes for dumped tables
