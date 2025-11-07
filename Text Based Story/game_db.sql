@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 07, 2025 at 07:39 AM
+-- Generation Time: Nov 07, 2025 at 03:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,14 +47,6 @@ CREATE TABLE `progression` (
   `game_progress` text NOT NULL,
   `score_sum` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `progression`
---
-
-INSERT INTO `progression` (`user_id`, `username`, `game_progress`, `score_sum`) VALUES
-(37, 'user1', 'You started your journeyThe starting of the day was tough. ', 0),
-(38, 'gaus', 'You started your journey... You found an orphan crying at the roadside. Seems like it lost some money it had. ', 0);
 
 -- --------------------------------------------------------
 
@@ -107,7 +99,7 @@ ALTER TABLE `progression`
 -- AUTO_INCREMENT for table `progression`
 --
 ALTER TABLE `progression`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
