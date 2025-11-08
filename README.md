@@ -31,3 +31,5 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 - more animations
 - username validation logic (duplicate names are allowed for now)
 - Story window should auto scroll at the bottom (to show current storyline)
+- Feedback:
+>> BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
