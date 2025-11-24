@@ -18,7 +18,8 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 - https://pixelfrog-assets.itch.io/tiny-swords 
 - https://samuellee.itch.io/reaper-animated-pixel-art/ 
 
-### Used software
+### Used software / technology
+- HTML, CSS, JS, PHP, MySQL
 - ChatGPT, Gemini (fixes, codes in backup folder are my own)
 - VS Code
 - XAMPP (localhost), InfinityFree (hosting)
