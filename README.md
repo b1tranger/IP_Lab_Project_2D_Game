@@ -29,12 +29,6 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 
 ### # To-do Next
 - refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/Text%20Based%20Story/ideation.md)
-- [ ] add background
-- [ ] fix SEO (attachment view, web link details)
-- [ ] more storylines
-- [ ] more animations
-- [ ] username validation logic (duplicate names are allowed for now)
-- [ ] Story window should auto scroll at the bottom (to show current storyline)
 
 ### # Feedback:
 > BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
