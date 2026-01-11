@@ -19,7 +19,7 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 > BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
 
 ### # To-do Next
-- refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/Text%20Based%20Story/ideation.md)
+- refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/ideation.md)
 
 ---
 
