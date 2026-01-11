@@ -7,9 +7,21 @@ ID: 0432410005101088
 
 Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/) 
 
+---
 
 ### # Play online
 - Go to https://ip-project-008.infinityfreeapp.com/ 
+
+---
+
+
+### # Feedback:
+> BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
+
+### # To-do Next
+- refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/Text%20Based%20Story/ideation.md)
+
+---
 
 ### # How to setup for localhost
 - copy files in xampp/htdocs/ folder
@@ -26,9 +38,3 @@ Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/)
 - VS Code
 - XAMPP (localhost), InfinityFree (hosting)
 - Aseprite (asset editing, .gif export)
-
-### # To-do Next
-- refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/Text%20Based%20Story/ideation.md)
-
-### # Feedback:
-> BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
