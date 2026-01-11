@@ -95,7 +95,7 @@ if (isset($_POST["submit"])) {
             <h2 style="text-align:center"><a href="https://github.com/b1tranger/IP_Lab_Project_2D_Game" target="_blank"
                     class="link">0432410005101088</a></h2>
             <hr style="max-width:300px;margin-bottom:50px;">
-            <img src="assets/Warrior-idle.gif" height="200px" style="margin-top: -30px;margin-bottom: -30px;">
+            <img src="../assets/Warrior-idle.gif" height="200px" style="margin-top: -30px;margin-bottom: -30px;">
             <form method="POST" style="padding-top: 20px;">
                 <label for="username">Enter Username:</label>
                 <br><br>

@@ -291,9 +291,9 @@ $current_score_from_db = $sqlProgressFetch['score_sum'];
             <div>
                 <?php $RNG = $_SESSION['story_state']; ?>
                 <?php if ($RNG == 2 || $RNG == 4 || $RNG == 5 || $RNG == 6): ?>
-                    <img src="assets/Warrior-attack-defend.gif" height="200px" style="margin-bottom:-100px;">
+                    <img src="../assets/Warrior-attack-defend.gif" height="200px" style="margin-bottom:-100px;">
                 <?php else: ?>
-                    <img src="assets/Warrior-running.gif" height="200px" style="margin-bottom:-100px;">
+                    <img src="../assets/Warrior-running.gif" height="200px" style="margin-bottom:-100px;">
                 <?php endif ?>
             </div>
         </div>
