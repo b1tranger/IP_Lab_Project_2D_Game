@@ -8,31 +8,33 @@ ID: 0432410005101088
 Faculty: [Tahmina Islam](https://uits.edu.bd/tahmina-islam/) 
 
 
-### Play online
+### # Play online
 - Go to https://ip-project-008.infinityfreeapp.com/ 
 
-### How to setup for localhost
+### # How to setup for localhost
 - copy files in xampp/htdocs/ folder
 - import the .sql file in phpmyadmin database
 - run Text Based Story/index.php
 
-### Used Assets
+### # Used Assets
 - https://pixelfrog-assets.itch.io/tiny-swords 
 - https://samuellee.itch.io/reaper-animated-pixel-art/ 
 
-### Used software / technology
+### # Used software / technology
 - HTML, CSS, JS, PHP, MySQL
 - ChatGPT, Gemini (fixes, codes in backup folder are my own)
 - VS Code
 - XAMPP (localhost), InfinityFree (hosting)
 - Aseprite (asset editing, .gif export)
 
-### To-do Next
-- add background
-- fix SEO (attachment view, web link details)
-- more storylines
-- more animations
-- username validation logic (duplicate names are allowed for now)
-- Story window should auto scroll at the bottom (to show current storyline)
-- Feedback:
->> BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
+### # To-do Next
+- refer to [ideation.md](https://github.com/b1tranger/IP_Lab_Project_2D_Game/blob/main/Text%20Based%20Story/ideation.md)
+- [ ] add background
+- [ ] fix SEO (attachment view, web link details)
+- [ ] more storylines
+- [ ] more animations
+- [ ] username validation logic (duplicate names are allowed for now)
+- [ ] Story window should auto scroll at the bottom (to show current storyline)
+
+### # Feedback:
+> BeLikeSohan: "text e ekta typewritter effect diyen, manabe onk"
