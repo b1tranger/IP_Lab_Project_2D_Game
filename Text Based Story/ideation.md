@@ -1,1 +1,7 @@
-- implement AI-based choice system
+- [ ] implement AI-based choice system | refer to [link](https://github.com/b1tranger/Programming-Records/blob/main/Project-Idea/AI_api/stock-market-prediction-project.pdf)
+- [ ] add background
+- [ ] fix SEO (attachment view, web link details)
+- [ ] more storylines
+- [ ] more animations
+- [ ] username validation logic (duplicate names are allowed for now)
+- [ ] Story window should auto scroll at the bottom (to show current storyline)
