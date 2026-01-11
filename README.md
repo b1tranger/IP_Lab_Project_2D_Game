@@ -1,3 +1,4 @@
+  > related repo [Game-Development-Journey](https://github.com/b1tranger/Game-Development-Journey/)
 A simple text-based game for my Internet Programming lab (CSE0613208) project. 
 The criteria was to use PHP forms and OOP concepts.
 
